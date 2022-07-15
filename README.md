@@ -1,3 +1,7 @@
+# About this project
+
+This project is going to be a [Wordlee](https://www.nytimes.com/games/wordle/index.html) clone with extra functions.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
