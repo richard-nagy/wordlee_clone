@@ -4,12 +4,22 @@ import { useState } from "react";
 const abc = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 
 export default function Game() {
-    const [input, setInput] = useState("");
+    const [input, setInput] = useState("a");
 
     function readPressedKey(key) {
-        setInput(
-            key != "Backspace" ? (abc.includes(key) ? input + key : input) : input.slice(0, -1)
-        );
+        if (key === "Backspace") {
+            setInput(input.slice(0, -1));
+            return;
+        }
+
+        if (key === "Enter" && input.length == 5) {
+            alert("5 char long :)");
+            return;
+        }
+
+        if (abc.includes(key) && input.length < 5) {
+            setInput(input + key);
+        }
     }
 
     return (
@@ -29,6 +39,13 @@ export default function Game() {
                 }}
             >
                 {"<-"}
+            </button>
+            <button
+                onClick={() => {
+                    readPressedKey("Enter");
+                }}
+            >
+                {"Enter"}
             </button>
         </div>
     );
