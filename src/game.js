@@ -1,18 +1,21 @@
 import { useState } from "react";
 
 // prettier-ignore
-const abc = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+const abc = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S",
+"D", "F", "G", "H", "J", "K", "L", "Enter", "Z", "X", "C", "V", "B", "N", "M", "<-"];
 
 export default function Game() {
-    const [input, setInput] = useState("a");
+    const [input, setInput] = useState("");
 
     function readPressedKey(key) {
-        if (key === "Backspace") {
+        key = key.toUpperCase();
+
+        if (key === "BACKSPACE" || key === "<-") {
             setInput(input.slice(0, -1));
             return;
         }
 
-        if (key === "Enter" && input.length == 5) {
+        if (key === "ENTER" && input.length == 5) {
             alert("5 char long :)");
             return;
         }
@@ -28,25 +31,20 @@ export default function Game() {
             tabIndex="0"
             style={{ backgroundColor: "gray", height: "500px", width: "500px" }}
         >
-            <h3>[{input}]</h3>
+            <h3 style={{ color: "white", height: "40px" }}>{input}</h3>
             <br />
-            {abc.map((e) => {
-                return <button onClick={() => readPressedKey(e)}>{e}</button>;
-            })}
-            <button
-                onClick={() => {
-                    readPressedKey("Backspace");
+            <div
+                style={{
+                    width: "260px",
+                    display: "flex",
+                    justifyContent: "center",
+                    flexWrap: "wrap",
                 }}
             >
-                {"<-"}
-            </button>
-            <button
-                onClick={() => {
-                    readPressedKey("Enter");
-                }}
-            >
-                {"Enter"}
-            </button>
+                {abc.map((e) => {
+                    return <button onClick={() => readPressedKey(e)}>{e}</button>;
+                })}
+            </div>
         </div>
     );
 }
