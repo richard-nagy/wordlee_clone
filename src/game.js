@@ -19,6 +19,17 @@ export default function Game() {
             style={{ backgroundColor: "gray", height: "500px", width: "500px" }}
         >
             <h3>[{input}]</h3>
+            <br />
+            {abc.map((e) => {
+                return <button onClick={() => readPressedKey(e)}>{e}</button>;
+            })}
+            <button
+                onClick={() => {
+                    readPressedKey("Backspace");
+                }}
+            >
+                {"<-"}
+            </button>
         </div>
     );
 }
