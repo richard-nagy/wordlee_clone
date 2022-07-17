@@ -31,7 +31,7 @@ export default function Game() {
         }
 
         if (key === "ENTER" && input.length === 5) {
-            console.log(wordColor);
+            // console.log(wordColor);
 
             // If we guessed the correct word
             if (word === input) {
@@ -40,15 +40,36 @@ export default function Game() {
             }
 
             // Set the background colors of the rectangles
+            let obj = {};
+            word.split("").forEach((e) => {
+                if (!obj[e]) {
+                    obj[e] = 1;
+                } else {
+                    obj[e] += 1;
+                }
+            });
+
             const colors = [];
-            input.split("").forEach((e, i) => {
-                console.log(e);
+
+            const stuff = input.split("");
+
+            stuff.forEach((e, i) => {
                 if (word.split("")[i] === e) {
                     colors.push("green");
-                } else if (word.includes(e)) {
-                    colors.push("orange");
-                } else {
-                    colors.push("gray");
+                    obj[e] -= 1;
+                    return;
+                }
+                // if (word.split("").includes(e)) {
+                //     colors.push("orange");
+                //     return;
+                // }
+                colors.push("gray");
+            });
+
+            stuff.forEach((e, i) => {
+                if (word.split("").includes(e) && colors[i] === "gray" && obj[e] > 0) {
+                    colors[i] = "orange";
+                    obj[e] -= 1;
                 }
             });
 
