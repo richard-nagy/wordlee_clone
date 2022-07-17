@@ -18,7 +18,9 @@ const abc = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F
 
 export default function Game() {
     const [input, setInput] = useState("");
-    const [guesses, setGuesses] = useState([]);
+    const [guessWord, setGuessWord] = useState([]);
+    const [wordColor, setWordColor] = useState([]);
+    const word = "WORLD";
 
     function readPressedKey(key) {
         key = key.toUpperCase();
@@ -29,8 +31,29 @@ export default function Game() {
         }
 
         if (key === "ENTER" && input.length === 5) {
-            // alert("5 char long :)");
-            setGuesses([...guesses, input]);
+            console.log(wordColor);
+
+            // If we guessed the correct word
+            if (word === input) {
+                alert("You winn!");
+                return;
+            }
+
+            // Set the background colors of the rectangles
+            const colors = [];
+            input.split("").forEach((e, i) => {
+                console.log(e);
+                if (word.split("")[i] === e) {
+                    colors.push("green");
+                } else if (word.includes(e)) {
+                    colors.push("orange");
+                } else {
+                    colors.push("gray");
+                }
+            });
+
+            setWordColor([...wordColor, colors]);
+            setGuessWord([...guessWord, input]);
             setInput("");
             return;
         }
@@ -58,23 +81,27 @@ export default function Game() {
 
             <table style={{ borderSpacing: "10px", borderCollapse: "separate" }}>
                 <tbody>
-                    {guesses.map((e) => {
+                    {guessWord.map((element, i0) => {
                         return (
                             <tr>
-                                {e.split("").map((element) => {
-                                    return <StyledTd>{element}</StyledTd>;
+                                {element.split("").map((e, i) => {
+                                    return (
+                                        <StyledTd style={{ backgroundColor: wordColor[i0][i] }}>
+                                            {e}
+                                        </StyledTd>
+                                    );
                                 })}
                             </tr>
                         );
                     })}
                     <tr>
                         {Array.from({ length: 5 }).map((_, i) => {
-                            return guesses.length < 5 ? (
+                            return guessWord.length < 6 ? (
                                 <StyledTd>{input.charAt(i)}</StyledTd>
                             ) : null;
                         })}
                     </tr>
-                    {Array.from({ length: 5 - guesses.length }).map((_, i) => (
+                    {Array.from({ length: 5 - guessWord.length }).map((_, i) => (
                         <tr>
                             <StyledTd></StyledTd>
                             <StyledTd></StyledTd>
@@ -103,7 +130,7 @@ export default function Game() {
                     })}
                 </Grid>
             </div>
-            {guesses.map((e) => {
+            {guessWord.map((e) => {
                 return e;
             })}
         </div>
