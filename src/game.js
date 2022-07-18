@@ -20,65 +20,75 @@ export default function Game() {
     const [input, setInput] = useState("");
     const [guessWord, setGuessWord] = useState([]);
     const [wordColor, setWordColor] = useState([]);
+    const [abcColor, setAbcColor] = useState({});
+
     const word = "WORLD";
 
     function readPressedKey(key) {
         key = key.toUpperCase();
 
+        // If we press backspace remoe last letter
         if (key === "BACKSPACE" || key === "<-") {
             setInput(input.slice(0, -1));
             return;
         }
 
+        // If we have 5 letters and press enter
         if (key === "ENTER" && input.length === 5) {
-            // console.log(wordColor);
-
-            // If we guessed the correct word
             if (word === input) {
                 alert("You winn!");
                 return;
             }
 
-            // Set the background colors of the rectangles
-            let obj = {};
+            // Count letters
+            let countedLetters = {};
             word.split("").forEach((e) => {
-                if (!obj[e]) {
-                    obj[e] = 1;
+                if (!countedLetters[e]) {
+                    countedLetters[e] = 1;
                 } else {
-                    obj[e] += 1;
+                    countedLetters[e] += 1;
                 }
             });
 
-            const colors = [];
+            const wordColors = [];
+            const abcColors = {};
 
-            const stuff = input.split("");
-
-            stuff.forEach((e, i) => {
+            // MArk  matching letters
+            input.split("").forEach((e, i) => {
                 if (word.split("")[i] === e) {
-                    colors.push("green");
-                    obj[e] -= 1;
+                    wordColors.push("green");
+                    countedLetters[e] -= 1;
+                    abcColors[e] = "green";
                     return;
                 }
-                // if (word.split("").includes(e)) {
-                //     colors.push("orange");
-                //     return;
-                // }
-                colors.push("gray");
-            });
 
-            stuff.forEach((e, i) => {
-                if (word.split("").includes(e) && colors[i] === "gray" && obj[e] > 0) {
-                    colors[i] = "orange";
-                    obj[e] -= 1;
+                wordColors.push("gray");
+                if (abcColors[e] !== "green") {
+                    abcColors[e] = "gray";
                 }
             });
 
-            setWordColor([...wordColor, colors]);
+            // Mark missplaced letters
+            input.split("").forEach((e, i) => {
+                if (
+                    word.split("").includes(e) &&
+                    wordColors[i] === "gray" &&
+                    countedLetters[e] > 0
+                ) {
+                    wordColors[i] = "orange";
+                    abcColors[e] = "orange";
+                    countedLetters[e] -= 1;
+                }
+            });
+
+            setWordColor([...wordColor, wordColors]);
+            setAbcColor({ ...abcColor, ...abcColors });
             setGuessWord([...guessWord, input]);
             setInput("");
             return;
         }
 
+        // Check if we entered a letter from the list
         if (abc.includes(key) && input.length < 5) {
             setInput(input + key);
         }
@@ -91,15 +101,6 @@ export default function Game() {
             className="bg-dark"
             style={{ height: "700px", width: "700px" }}
         >
-            <style type="text/css">
-                {`
-                .btn- {
-                    background-color: purple;
-                    color: white;
-                }
-                `}
-            </style>
-
             <table style={{ borderSpacing: "10px", borderCollapse: "separate" }}>
                 <tbody>
                     {guessWord.map((element, i0) => {
@@ -136,11 +137,14 @@ export default function Game() {
             <br />
             <div style={{ width: "370px" }}>
                 <Grid container columnSpacing={10} rowSpacing={1}>
-                    {abc.map((e) => {
+                    {abc.map((e, i) => {
                         return (
                             <Grid item xs={1}>
                                 <Button
-                                    sx={{ color: "black", backgroundColor: "lightGray" }}
+                                    sx={{
+                                        color: "black",
+                                        backgroundColor: abcColor[e] ? abcColor[e] : "lightGray",
+                                    }}
                                     variant="contained"
                                     onClick={() => readPressedKey(e)}
                                 >
