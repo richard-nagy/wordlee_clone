@@ -94,9 +94,13 @@ export default function Game() {
         }
     }
 
+    document.body.onkeydown = (e) => {
+        readPressedKey(e.key);
+    };
+
     return (
         <div
-            onKeyDown={(e) => readPressedKey(e.key)}
+            // onKeyDown={(e) => readPressedKey(e.key)}
             tabIndex="0"
             className="bg-dark"
             style={{ height: "700px", width: "700px" }}
