@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import { Grid, styled } from "@mui/material";
+import textFile from "./words.txt";
 
 const StyledTd = styled("td")(() => ({
     color: "white",
@@ -11,6 +12,12 @@ const StyledTd = styled("td")(() => ({
     fontSize: "24px",
     fontWeight: "bold",
 }));
+
+const listOfWords = fetch(textFile)
+    .then((r) => r.text())
+    .then((text) => {
+        console.log(text.split(/[\n\r]+/));
+    });
 
 // prettier-ignore
 const abc = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F",
