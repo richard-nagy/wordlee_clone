@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Grid, styled } from "@mui/material";
 import textFile from "./words.txt";
@@ -13,12 +13,6 @@ const StyledTd = styled("td")(() => ({
     fontWeight: "bold",
 }));
 
-const listOfWords = fetch(textFile)
-    .then((r) => r.text())
-    .then((text) => {
-        console.log(text.split(/[\n\r]+/));
-    });
-
 // prettier-ignore
 const abc = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F",
 "G", "H", "J", "K", "L", "Enter", "Z", "X", "C", "V", "B", "N", "M", "<-"];
@@ -28,8 +22,21 @@ export default function Game() {
     const [guessWord, setGuessWord] = useState([]);
     const [wordColor, setWordColor] = useState([]);
     const [abcColor, setAbcColor] = useState({});
+    const [listOfWords, setListOfWords] = useState();
+    const [word, setWord] = useState();
 
-    const word = "WORLD";
+    useEffect(() => {
+        fetch(textFile)
+            .then((r) => r.text())
+            .then((text) => {
+                const words = text.split(/[\n\r]+/);
+
+                setListOfWords(words);
+                setWord(words[Math.floor(Math.random() * words.length)].toUpperCase());
+            });
+    }, []);
+
+    console.log(word);
 
     function readPressedKey(key) {
         key = key.toUpperCase();
@@ -44,6 +51,10 @@ export default function Game() {
         if (key === "ENTER" && input.length === 5) {
             if (word === input) {
                 alert("You winn!");
+                return;
+            }
+
+            if (!listOfWords.includes(input.toLowerCase())) {
                 return;
             }
 
