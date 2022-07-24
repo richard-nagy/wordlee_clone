@@ -1,24 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Grid, styled } from "@mui/material";
-import textFile from "./words.txt";
-
-const StyledTd = styled("td")(() => ({
-    color: "white",
-    border: "2px solid white",
-    width: "50px",
-    height: "50px",
-    textAlign: "center",
-    fontSize: "24px",
-    fontWeight: "bold",
-}));
+import textFile from "../words.txt";
+import GameGrid from "./gameGrid";
 
 // prettier-ignore
 const abc = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F",
 "G", "H", "J", "K", "L", "Enter", "Z", "X", "C", "V", "B", "N", "M", "<-"];
 
 export default function Game() {
-    const [input, setInput] = useState("");
+    const input = useContext("");
+
     const [guessWord, setGuessWord] = useState([]);
     const [wordColor, setWordColor] = useState([]);
     const [abcColor, setAbcColor] = useState({});
@@ -43,7 +35,7 @@ export default function Game() {
 
         // If we press backspace remoe last letter
         if (key === "BACKSPACE" || key === "<-") {
-            setInput(input.slice(0, -1));
+            input = input.slice(0, -1);
             return;
         }
 
@@ -102,13 +94,13 @@ export default function Game() {
             setWordColor([...wordColor, wordColors]);
             setAbcColor({ ...abcColor, ...abcColors });
             setGuessWord([...guessWord, input]);
-            setInput("");
+            input = "";
             return;
         }
 
         // Check if we entered a letter from the list
         if (abc.includes(key) && input.length < 5) {
-            setInput(input + key);
+            input = input + key;
         }
     }
 
@@ -117,47 +109,10 @@ export default function Game() {
     };
 
     return (
-        <div
-            // onKeyDown={(e) => readPressedKey(e.key)}
-            tabIndex="0"
-            className="bg-dark"
-            style={{ height: "700px", width: "700px" }}
-        >
-            <table style={{ borderSpacing: "10px", borderCollapse: "separate" }}>
-                <tbody>
-                    {guessWord.map((element, i0) => {
-                        return (
-                            <tr>
-                                {element.split("").map((e, i) => {
-                                    return (
-                                        <StyledTd style={{ backgroundColor: wordColor[i0][i] }}>
-                                            {e}
-                                        </StyledTd>
-                                    );
-                                })}
-                            </tr>
-                        );
-                    })}
-                    <tr>
-                        {Array.from({ length: 5 }).map((_, i) => {
-                            return guessWord.length < 6 ? (
-                                <StyledTd>{input.charAt(i)}</StyledTd>
-                            ) : null;
-                        })}
-                    </tr>
-                    {Array.from({ length: 5 - guessWord.length }).map((_, i) => (
-                        <tr>
-                            <StyledTd></StyledTd>
-                            <StyledTd></StyledTd>
-                            <StyledTd></StyledTd>
-                            <StyledTd></StyledTd>
-                            <StyledTd></StyledTd>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div tabIndex="0" className="bg-dark" style={{ height: "700px", width: "700px" }}>
             <br />
             <div style={{ width: "370px" }}>
+                <GameGrid />
                 <Grid container columnSpacing={10} rowSpacing={1}>
                     {abc.map((e, i) => {
                         return (
@@ -177,9 +132,6 @@ export default function Game() {
                     })}
                 </Grid>
             </div>
-            {guessWord.map((e) => {
-                return e;
-            })}
         </div>
     );
 }
