@@ -1,5 +1,13 @@
 // TODO: Create grid here
 
-export default function GameGrid() {
-    return <div>Keyboard</div>;
+export default function Keyboard({ listOfWords }) {
+    return (
+        <div>
+            <ul>
+                {listOfWords.map((word) => {
+                    return <li key={Math.random()}>{word}</li>;
+                })}
+            </ul>
+        </div>
+    );
 }
