@@ -1,5 +1,21 @@
-// TODO: Create keyboard here
+import { memo, useState } from "react";
 
-export default function Keyboard() {
-    return <div>Keyboard</div>;
+function Keyboard({ keyboardList, onKeyPress }) {
+    return (
+        <div>
+            {keyboardList.map((e) => {
+                return (
+                    <button
+                        onClick={() => {
+                            onKeyPress(e);
+                        }}
+                    >
+                        {e}
+                    </button>
+                );
+            })}
+        </div>
+    );
 }
+
+export default memo(Keyboard);
